@@ -1,8 +1,8 @@
 pipeline {
 	agent any
-	// tools {
-	// 	nodejs 'NodeJS'
-	// }
+	tools {
+		nodejs 'NodeJS'
+	}
 	// environment {
 	// 	DOCKER_HUB_REPO = 'iquantc/iquant-app'
 	// 	DOCKER_HUB_CREDENTIALS_ID = 'gitops-dockerhub'
@@ -13,11 +13,11 @@ pipeline {
 			git branch: 'main', credentialsId: 'k8s-daily-learning-github', url: 'https://github.com/mohammedfarhaan/Jenkins-ArgoCD-GitOps.git'
 			}
 		}		
-		// stage('Install node dependencies'){
-		// 	steps {
-		// 		sh 'npm install'
-		// 	}
-		// }
+		stage('Install node dependencies'){
+			steps {
+				sh 'npm install'
+			}
+		}
 		// stage('Build Docker Image'){
 		// 	steps {
 		// 		script {
