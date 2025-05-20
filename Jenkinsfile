@@ -3,10 +3,10 @@ pipeline {
 	tools {
 		nodejs 'NodeJS'
 	}
-	// environment {
-	// 	DOCKER_HUB_REPO = 'iquantc/iquant-app'
-	// 	DOCKER_HUB_CREDENTIALS_ID = 'gitops-dockerhub'
-	// }
+	environment {
+		DOCKER_HUB_REPO = 'stylixfarhaan/k8s-dailylearning'
+		// DOCKER_HUB_CREDENTIALS_ID = 'gitops-dockerhub'
+	}
 	stages {
 		stage('Checkout Github'){
 			steps {
@@ -18,14 +18,14 @@ pipeline {
 				sh 'npm install'
 			}
 		}
-		// stage('Build Docker Image'){
-		// 	steps {
-		// 		script {
-		// 			echo 'building docker image...'
-		// 			dockerImage = docker.build("${DOCKER_HUB_REPO}:latest")
-		// 		}
-		// 	}
-		// }
+		stage('Build Docker Image'){
+			steps {
+				script {
+					echo 'building docker image...'
+					dockerImage = docker.build("${DOCKER_HUB_REPO}:latest")
+				}
+			}
+		}
 		// stage('Trivy Scan'){
 		// 	steps {
 		// 		//sh 'trivy --severity HIGH,CRITICAL --no-progress image --format table -o trivy-scan-report.txt ${DOCKER_HUB_REPO}:latest'
