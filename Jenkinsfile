@@ -5,7 +5,7 @@ pipeline {
 	}
 	environment {
 		DOCKER_HUB_REPO = 'stylixfarhaan/k8s-dailylearning'
-		// DOCKER_HUB_CREDENTIALS_ID = 'gitops-dockerhub'
+		DOCKER_HUB_CREDENTIALS_ID = 'K8s-pipeline'
 	}
 	stages {
 		stage('Checkout Github'){
@@ -33,16 +33,16 @@ pipeline {
 				sh 'trivy image --severity HIGH,CRITICAL --skip-db-update --no-progress --format table -o trivy-scan-report.txt ${DOCKER_HUB_REPO}:latest'
 			}
 		}
-		// stage('Push Image to DockerHub'){
-		// 	steps {
-		// 		script {
-		// 			echo 'pushing docker image to DockerHub...'
-		// 			docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_HUB_CREDENTIALS_ID}"){
-		// 				dockerImage.push('latest')
-		// 				}
-		// 			}
-		// 		}
-		// 	}
+		stage('Push Image to DockerHub'){
+			steps {
+				script {
+					echo 'pushing docker image to DockerHub...'
+					docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_HUB_CREDENTIALS_ID}"){
+						dockerImage.push('latest')
+						}
+					}
+				}
+			}
 		// stage('Install Kubectl & ArgoCD CLI'){
 		// 	steps {
 		// 		sh '''
