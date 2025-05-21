@@ -70,6 +70,7 @@ pipeline {
 
                     # Download kubectl (example for Linux AMD64)
                     curl -sLO https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/kubectl
+					mv kubectl $LOCAL_BIN/kubectl
                     chmod +x $LOCAL_BIN/kubectl
 
                     echo "Versions:"
