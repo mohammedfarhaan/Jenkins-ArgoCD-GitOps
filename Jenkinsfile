@@ -75,7 +75,7 @@ pipeline {
 
                     echo "Versions:"
                     $LOCAL_BIN/argocd version --client
-                    $LOCAL_BIN/kubectl version --client
+                   
                 '''
             }
         }
