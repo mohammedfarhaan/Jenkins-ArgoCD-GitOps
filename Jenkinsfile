@@ -6,6 +6,8 @@ pipeline {
 	environment {
 		DOCKER_HUB_REPO = 'stylixfarhaan/k8s-dailylearning'
 		DOCKER_HUB_CREDENTIALS_ID = 'K8s-pipeline'
+		LOCAL_BIN = "${WORKSPACE}/bin"
+        PATH = "${WORKSPACE}/bin:${env.PATH}"
 	}
 	stages {
 		stage('Checkout Github'){
@@ -43,15 +45,44 @@ pipeline {
 					}
 				}
 			}
-		stage('Install Kubectl & ArgoCD CLI'){
-			steps {
-				sh '''
-				echo 'installing Kubectl & ArgoCD cli...'
-				curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-				chmod +x /usr/local/bin/argocd
-				'''
-			}
-		}
+		// stage('Install Kubectl & ArgoCD CLI'){
+		// 	steps {
+		// 		sh '''
+		// 		echo 'installing Kubectl & ArgoCD cli...'
+		// 		curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+		// 		chmod +x kubectl
+		// 		mv kubectl /usr/local/bin/kubectl
+		// 		curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+		// 		chmod +x /usr/local/bin/argocd
+		// 		'''
+		// 	}
+		// }
+        stage('Install ArgoCD & kubectl') {
+            steps {
+                sh '''
+                    echo "Installing ArgoCD & kubectl in ${LOCAL_BIN}..."
+
+                    mkdir -p $LOCAL_BIN
+
+                    # Download ArgoCD CLI
+                    curl -sSL -o $LOCAL_BIN/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+                    chmod +x $LOCAL_BIN/argocd
+
+                    # Download kubectl (example for Linux AMD64)
+                    curl -sLO https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+                    mv kubectl $LOCAL_BIN/kubectl
+                    chmod +x $LOCAL_BIN/kubectl
+
+                    echo "Versions:"
+                    $LOCAL_BIN/argocd version --client
+                    $LOCAL_BIN/kubectl version --client
+                '''
+            }
+        }
+    
+
+
+
 		stage('Apply Kubernetes Manifests & Sync App with ArgoCD'){
 			steps {
 				script {
