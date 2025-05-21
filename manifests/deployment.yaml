@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: node-app
-        image: iquantc/iquant-app:latest
+        image: stylixfarhaan/k8s-dailylearning:latest
         ports:
         - containerPort: 3000
 
