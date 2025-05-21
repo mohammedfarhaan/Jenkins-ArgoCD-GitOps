@@ -69,8 +69,7 @@ pipeline {
                     chmod +x $LOCAL_BIN/argocd
 
                     # Download kubectl (example for Linux AMD64)
-                    curl -sLO https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
-                    mv kubectl $LOCAL_BIN/kubectl
+                    curl -sLO https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/kubectl
                     chmod +x $LOCAL_BIN/kubectl
 
                     echo "Versions:"
