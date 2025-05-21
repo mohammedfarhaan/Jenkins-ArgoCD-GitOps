@@ -43,25 +43,25 @@ pipeline {
 					}
 				}
 			}
-		stage('Install Kubectl & ArgoCD CLI'){
-			steps {
-				sh '''
-				echo 'installing Kubectl & ArgoCD cli...'
-				curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-				chmod +x kubectl
-				mv kubectl /usr/local/bin/kubectl
-				curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-				chmod +x /usr/local/bin/argocd
-				'''
-			}
-		}
+		// stage('Install Kubectl & ArgoCD CLI'){
+		// 	steps {
+		// 		sh '''
+		// 		echo 'installing Kubectl & ArgoCD cli...'
+		// 		curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+		// 		chmod +x kubectl
+		// 		mv kubectl /usr/local/bin/kubectl
+		// 		curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+		// 		chmod +x /usr/local/bin/argocd
+		// 		'''
+		// 	}
+		// }
 		stage('Apply Kubernetes Manifests & Sync App with ArgoCD'){
 			steps {
 				script {
 					kubeconfig(credentialsId: 'kubeconfig', serverUrl: 'https://127.0.0.1:32791') {
     						sh '''
 						argocd login 127.0.0.1:31042 --username admin --password $(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) --insecure
-						
+					
 						'''
 					}	
 				}
